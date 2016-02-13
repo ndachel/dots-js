@@ -4,9 +4,15 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <title></title>
  </head>
-<body onload="setInterval(loop,1000/30);">  
-<div style="margin: 0 auto; max-width: 700px; background-color: #999999; padding: 15px">
-  <div id="container" style="margin: 0 auto; border: 1px solid black; width: 400px; height: 400px;cursor: none" onclick="click()"></div>
+<body onload="setInterval(loop,1000/30);" style="background-color: #232937">  
+<div style="margin: 0 auto; max-width: 700px; background-color: #232937; 
+            padding: 15px; 
+            font-family:Source Sans Pro, Arial,Baskerville,monospace; color: #fff;
+            font-weight: 300; size: 15.4px">
+            <div id="header" style="font-family: Source Sans Pro; font-size: 46.2px; font-weight: bold; text-align: center">
+                DOTS</div>
+  <div id="container" style="margin: 0 auto; border: 1px solid white; width: 400px; height: 400px;cursor: none" onclick="click()"></div>
+  <div id="debug" style="display: none">
   <table><tr>
   <td>Input:<td><input type="text" id="inN" /><br></tr>
   <tr><td>Output:<td><textarea id="out1" cols=40 rows=6></textarea><br></tr>
@@ -19,9 +25,11 @@
   <tr><td>Line:<td>x1:<input id="x1" type="text"><td>y1:<input id="y1" type="text">
   <tr><td><td>x2:<input id="x2" type="text"><td>y2:<input id="y2" type="text">
   </table>
+  </div> <!--end debug-->
 </div>
   
   <script type="text/javascript">
+    var player = 1;
     var click1 = new Point (-1, -1);
     var click2 = new Point (-1, -1);
     var pointArr = new Array();
@@ -57,7 +65,7 @@
         canvas.height = h;
         container.appendChild(canvas);
         context = canvas.getContext("2d");
-        context.fillStyle = "#666";
+        context.fillStyle = "#282E3E";
         context.fillRect(0, 0, w, h);
         canvas.addEventListener('mousemove', function(evt) {
           mousePos = getMousePos(canvas, evt);
@@ -77,10 +85,13 @@
             click2.y = mousePos.doty;
           }
         }, false);
+        //auto init
+        n = 13;
+        update();
     }
     
     function update(){
-      n = $("#inN").val();
+      //n = $("#inN").val();
       output = "n: " + n + "\n" + "Total Points: " + n*n + "\n";
       count = 0;
       for (x=0;x<n;x++){
@@ -140,14 +151,23 @@
       context.arc(x,y,rad, 0, 2 * Math.PI, false);
       context.fillStyle = color;
       context.fill();
-      context.lineWidth = 2;
-      context.strokeStyle = '#003300';
-      context.stroke();
+    }
+    
+    function paintCursor(x,y,rad,color){
+      var grad = context.createLinearGradient(x-rad,y,x+rad,y);
+      grad.addColorStop("0.5",'#962FE4');
+      grad.addColorStop("1.0",'#DC398B');
+      context.beginPath();
+      context.arc(x,y,rad, 0, 2 * Math.PI, false);
+      context.fillStyle = color;
+      context.lineWidth = 1.5;
+      context.strokeStyle = grad;
+      context.stroke();        
     }
     
     function drawDots(){
       //Background
-      context.fillStyle = "#666";
+      context.fillStyle = "#282E3E";
       context.fillRect(0, 0, w, h);
       //All Dots
       for (var i = 0; i < pointArr.length; i++) {
@@ -155,9 +175,12 @@
        paintDot((point.x * spacing/n) + padding, (point.y * spacing/n) + padding, 5,'white');
 	    }
       //cursor dots
-      if (mousePos.dotx < n && mousePos.doty < n){ paintDot((mousePos.dotx * spacing/n) + padding, (mousePos.doty * spacing/n) + padding, 15,"rgba(0,255,0,0.25)"); }
-      if (click1.x > -1){ paintDot((click1.x * spacing/n) + padding, (click1.y * spacing/n) + padding, 15,"rgba(0,255,0,0.25)"); }
-      if (click2.x > -1){ paintDot((click2.x * spacing/n) + padding, (click2.y * spacing/n) + padding, 15,"rgba(0,255,0,0.25)"); }
+      if (player == 1) color = "rgb(0,128,212)";
+      if (player == 2) color = "rgba(39,200,122,0.9)";
+      if (mousePos.dotx < n && mousePos.doty < n){ paintCursor((mousePos.dotx * spacing/n) + padding, (mousePos.doty * spacing/n) + padding, 15,"rgba(0,255,0,0.25)"); }
+      if (click1.x > -1){ paintDot((click1.x * spacing/n) + padding, (click1.y * spacing/n) + padding, 8, color); }
+      if (click2.x > -1){ paintDot((click2.x * spacing/n) + padding, (click2.y * spacing/n) + padding, 8, color); }
+      
     }
   </script>
 </body>
