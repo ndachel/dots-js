@@ -29,16 +29,19 @@ function drawDots(){
   context.fillStyle = "#282E3E";
   context.fillRect(0, 0, w, h);
   //All Dots
+  var radius = 3.5 - (Math.floor(n/10));
   var i = 0;
   for (i = 0; i < pointArr.length; i++) {
     var point = pointArr[i];
-    paintDot((point.x * spacing/n) + padding, (point.y * spacing/n) + padding, 3.5, "#fff");
+    paintDot((point.x * spacing/n) + padding, (point.y * spacing/n) + padding, radius, "#fff");
   }
   //cursor dots
-  var cursor = "#999";
-  var cursorFill = "rgba(0,0,0,0)";
-  if (checkValidCursor() || click1.x == -1){ cursor = colors[player]; cursorFill = fillColors[player];}
-  if (mousePos.dotx < n && mousePos.doty < n){ paintCursor((mousePos.dotx * spacing/n) + padding, (mousePos.doty * spacing/n) + padding, 15, cursor, cursorFill); }
+  var cursor = "rgba(255,0,0,.5)";
+  var cursorFill = "rgba(255,0,0,.1)";
+  if (cTurn == false){
+    if (checkValidCursor() || click1.x == -1){ cursor = colors[player]; cursorFill = fillColors[player];}
+    if (mousePos.dotx < n && mousePos.doty < n){ paintCursor((mousePos.dotx * spacing/n) + padding, (mousePos.doty * spacing/n) + padding, 15, cursor, cursorFill); }
+  }
   if (click1.x > -1){ paintDot((click1.x * spacing/n) + padding, (click1.y * spacing/n) + padding, 12, colors[player]); }
   if (click2.x > -1){ paintDot((click2.x * spacing/n) + padding, (click2.y * spacing/n) + padding, 12, colors[player]); }
   
@@ -80,4 +83,10 @@ function paintScore(){
     }
     $("#player1").text("Player 1 : " + score[0]);
     $("#player2").text("Player 2 : " + score[1]);
+}
+
+function paintWinner(){
+  if (winner == 0) {alert("1 wins"); winner = -1;}
+  if (winner == 1) {alert("2 wins"); winner = -1;}
+  if (winner == 2) {alert("A Tie!"); winner = -1;}
 }
