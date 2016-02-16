@@ -30,51 +30,50 @@
   <div id="player2" class="player2"></div>
 </div>
   
-  <script type="text/javascript">
-    var player = 0;
-    var score = [0,0];
-    var click1 = new Point (-1, -1);
-    var click2 = new Point (-1, -1);
-    var pointArr = new Array();
-    var squareArr = new Array();
-    var linesArr = new Array();
-    var squareid = 0;
-    var n = 13;
-    var padding = 25;
-    var spacing = 380;
-    var mousePos;
-    var message;
-    var cycle = 0;
-    var loopCount = 0;
-    //CANVAS VARS
-    var container, canvas, context;
-    var w = 400; var h = 400;
-    init();
-    
-    function loop() {
-      drawDots();
-      drawLines();
-      cycle = Math.sin(loopCount);
-      loopCount+=0.1;
-      paintScore();
-    }
-        
-    function init() {
-      container = document.getElementById('container');
-      canvas = document.createElement("canvas");
-      canvas.width = w;
-      canvas.height = h;
-      container.appendChild(canvas);
-      context = canvas.getContext("2d");
-      //context.translate(0.5, 0.5);
-      context.fillStyle = "#282E3E";
-      context.fillRect(0, 0, w, h);
-      canvas.addEventListener('mousemove', mouseMove, false);
-      canvas.addEventListener('click', mouseClick, false);
-      createBoard(n);
-    }
-    
+<script type="text/javascript">
+var ptype = ["c","c"];
+var cdelay = 0;
+var cTurn = false;
+var player = 0;
+var score = [0,0];
+var click1 = new Point (-1, -1);
+var click2 = new Point (-1, -1);
+var pointArr = new Array();
+var squareArr = new Array();
+var n = 13;
+var tryDepth = n;//((n-1)*n) - ((score[0] + score[1]) * 4); 
+var padding = 25;// - Math.floor(n/2);
+var spacing = 380;
+var mousePos;
+var container, canvas, context;
+var w = 400; var h = 400;
+var winner = -1;
 
-  </script>
+init();
+
+function loop() {
+  if (cTurn == false){
+    drawDots();
+    drawLines();
+    paintScore();
+    paintWinner();
+  }
+}
+    
+function init() {
+  container = document.getElementById('container');
+  canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  container.appendChild(canvas);
+  context = canvas.getContext("2d");
+  context.translate(0.5, 0.5);
+  context.fillStyle = "#282E3E";
+  context.fillRect(0, 0, w, h);
+  canvas.addEventListener('mousemove', mouseMove, false);
+  canvas.addEventListener('click', mouseClick, false);
+  createBoard(n);
+}
+</script>
 </body>
 </html>
